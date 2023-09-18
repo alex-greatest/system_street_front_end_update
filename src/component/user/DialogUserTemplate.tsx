@@ -74,7 +74,7 @@ export const DialogUserTemplate = (
                             render={({field: {onChange, value}}) => (
                                 <TextField
                                     onChange={(e) =>
-                                        onChange(e.target.value.replace(/[^A-Za-z0-9]/ig,''))}
+                                        onChange(e.target.value.replace(/[^A-Za-z0-9 ]/ig,''))}
                                     sx={{mt: '0.5em'}}
                                     id="userFieldId"
                                     key="userFieldKey"

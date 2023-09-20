@@ -9,8 +9,7 @@ type selectList = React.Dispatch<React.SetStateAction<ReferenceForRecipe>>;
 export const SelectorReference = (
     props: {
         setSelectReferences: selectList,
-        selectReference?: ReferenceForRecipe
-    }) => {
+        selectReference?: ReferenceForRecipe }) => {
     const {
         setSelectReferences,
         selectReference
@@ -18,17 +17,19 @@ export const SelectorReference = (
     const {data: listReferences, isSuccess, isRefetching} = useListNameReferences();
     const [selectModelDescription, setSelectModelDescription] =
         useState("");
+    const [firstRender, setFirstRender] = useState(false);
     const defaultValueReference = useMemo(() => {
         return {id: -1, modelDescription: ""}
     }, []);
 
     useEffect(() => {
-        if (isSuccess && listReferences && !isRefetching) {
+        if (isSuccess && !isRefetching && !firstRender) {
+            setFirstRender(true);
             const foundModelDescription = listReferences?.find(temp => temp.id === selectReference?.id)?.modelDescription
             setSelectModelDescription(foundModelDescription ?? "");
             setSelectReferences(foundModelDescription ? {...selectReference ?? defaultValueReference} : defaultValueReference);
         }
-    }, [defaultValueReference, isRefetching, isSuccess, listReferences, selectReference, selectReference?.id, setSelectReferences]);
+    }, [defaultValueReference, firstRender, isRefetching, isSuccess, listReferences, selectReference, selectReference?.id, setSelectReferences]);
 
     const changeReference = () => {
         setSelectReferences({
@@ -53,7 +54,7 @@ export const SelectorReference = (
                         labelId={`referenceListLabelModelDescription`}
                         defaultValue=""
                         label="Тип детали">
-                        <MenuItem key={"referenceDefaultSelectValue"} value={""}> Не выбрано </MenuItem>
+                        <MenuItem key={"referenceDefaultSelectValue"} value={""}> </MenuItem>
                         {listReferences && listReferences?.length > 0 ?
                             listReferences.map(reference =>
                                 <MenuItem key={reference.modelDescription} value={reference.modelDescription}>

@@ -22,6 +22,7 @@ import {NotificationDisplayService} from "../service/NotificationDisplayService"
 import {observer} from "mobx-react-lite";
 import {Operation} from "../type/result/operation/Operation";
 import {ToastContainer} from "react-toastify";
+import {useReferenceByPartName} from "../utils/api/reference";
 
 const helpDownloadFileCsv = new HelpDownloadFileCsv();
 
@@ -39,7 +40,6 @@ export const Operations = observer((props: {mainProps: ITemplateDataGrid}) => {
         partName,
         setPartName,
         paramRequest,
-        modelDescription,
         startFilter,
         endFilter,
         setStartFilter,
@@ -59,6 +59,8 @@ export const Operations = observer((props: {mainProps: ITemplateDataGrid}) => {
         isLoading,
         refetch } = useGetOperations(paramRequest);
 
+    const {data: reference} = useReferenceByPartName(partName);
+
     useEffect(() => {
         if(!!statusOperationsListName) {
             StoreService.addData(`/operations`, {
@@ -68,10 +70,9 @@ export const Operations = observer((props: {mainProps: ITemplateDataGrid}) => {
                 startFilter: startFilter,
                 endFilter: endFilter,
                 partNameStorage: partName,
-                modelDescriptionStorage: modelDescription
             });
         }
-    }, [columnFilters, sorting, pagination, partName, statusOperationsListName, modelDescription, startFilter, endFilter]);
+    }, [columnFilters, sorting, pagination, partName, statusOperationsListName, startFilter, endFilter]);
 
     useEffect(() => {
         if (operationIdPdf !== -1) {
@@ -96,11 +97,13 @@ export const Operations = observer((props: {mainProps: ITemplateDataGrid}) => {
     return (
         <Box sx={{paddingBottom: '5em'}}>
             <ToastContainer />
-            <InputPartName partName={partName} setPartName={setPartName} modelDescription={modelDescription} />
+            <InputPartName partName={partName}
+                           setPartName={setPartName}
+                           modelDescription={partName ? reference?.modelDescription ?? "" : ""} />
             <MaterialReactTable
                 key={"operationsMaterialReactTable"}
                 columns={useCreateColumnOperations(statusOperationsListName, startFilter, endFilter, setStartFilter, setEndFilter)}
-                data={data ?? []}
+                data={data && partName ? data : []}
                 initialState={{ showColumnFilters: true }}
                 manualPagination
                 manualFiltering
@@ -127,7 +130,7 @@ export const Operations = observer((props: {mainProps: ITemplateDataGrid}) => {
                         StoreService.addDataLocal(`/graph_effort/${operationId}`, {
                             partName: partName,
                             date: row?.original?.changeTime ?? new Date(),
-                            modelDescription: modelDescription
+                            modelDescription: reference?.modelDescription
                         });
                         window.open(`/graph_effort?operationId=${operationId}`, '_blank',
                             'noopener, noreferrer');
@@ -147,7 +150,7 @@ export const Operations = observer((props: {mainProps: ITemplateDataGrid}) => {
                         StoreService.addDataLocal(`/operation_results/${operationId}`, {
                             partName: partName,
                             date: row?.original?.changeTime ?? new Date(),
-                            modelDescription: modelDescription
+                            modelDescription: reference?.modelDescription
                         });
                         window.open(`/operations_results?operationId=${operationId}`, '_blank',
                             'noopener, noreferrer');
@@ -187,7 +190,7 @@ export const Operations = observer((props: {mainProps: ITemplateDataGrid}) => {
                 operationId={operationIdPdf}
                 setOperationId={setOperationIdPdf}
                 date={actualOperation.changeTime ?? new Date()}
-                modelDescription={modelDescription}
+                modelDescription={partName ? reference?.modelDescription ?? "" : ""}
                 partName={partName}/>
             }
         </Box>

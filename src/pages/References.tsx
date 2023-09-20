@@ -68,21 +68,22 @@ export const References = observer((props: {mainProps: ITemplateDataGrid}) => {
             {
                 accessorKey: 'dataRecordNumber',
                 header: 'Номер детали',
-                enableColumnFilter: true
+                enableColumnFilter: false
             },
             {
                 accessorKey: 'partTypeId',
                 header: 'Идентификатор детали',
-                enableColumnFilter: true
+                enableColumnFilter: false
             },
             {
                 accessorKey: 'user.name',
                 header: 'Автор',
-                enableColumnFilter: true
+                enableColumnFilter: false
             },
             {
                 accessorKey: 'changeTime',
-                header: 'Дата изменения'
+                header: 'Дата изменения',
+                enableColumnFilter: false
             },
         ],
         [],

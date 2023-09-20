@@ -24,6 +24,7 @@ export const apiRoutes = {
   downloadPartsCsv: `/api/download_parts_csv`,
   graphResultEffort: `/api/graph_results_effort`,
   graphResultMoment: `/api/graph_results_moment`,
+  referencePartName: `/api/references/part/name`,
 };
 
 export const pageRoutes = {

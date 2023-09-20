@@ -72,12 +72,12 @@ export const GraphPdf = observer((props: {
                 </View>
                 {idHtmlGraphMoment &&
                     <View>
-                        <Image src={idHtmlTableMoment}/>
+                        <Image src={idHtmlGraphMoment}/>
                     </View>
                 }
                 {idHtmlTableMoment &&
                     <View>
-                        <Image src={idHtmlGraphMoment}/>
+                        <Image src={idHtmlTableMoment}/>
                     </View>
                 }
             </Page>

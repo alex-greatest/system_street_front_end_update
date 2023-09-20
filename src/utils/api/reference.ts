@@ -20,6 +20,16 @@ export const useListNameReferences = () => {
     return { ...context, data: context.data };
 };
 
+export const useReferenceByPartName = (partName?: string)=> {
+    const context: UseQueryResult<ReferenceForRecipe, Error> = useFetch<ReferenceForRecipe>(
+        "referenceByPartName",
+        partName ? `${globalConfig.config.apiUrl}${pathToUrl(apiRoutes.referencePartName)}` : null,
+        {partName: partName},
+        { retry: false, keepPreviousData: true,  }
+    );
+    return { ...context, data: context.data };
+};
+
 export const useGetReferences = (params: object) => {
     const context: UseQueryResult<ApiResponse<Reference>, Error> = useFetch<ApiResponse<Reference>>(
         key,

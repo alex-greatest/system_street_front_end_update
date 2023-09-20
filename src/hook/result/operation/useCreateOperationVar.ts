@@ -12,12 +12,9 @@ export const useCreateOperationVar = (columnFilters: MRT_ColumnFiltersState, pag
     OperationHook => {
     const storageOperation = StoreService.getData("/operations");
     const partNameStorage = storageOperation?.partNameStorage;
-    const modelDescriptionStorage = storageOperation?.modelDescriptionStorage;
     const startTime = storageOperation?.startFilter ?? null;
     const endTime = storageOperation?.endFilter ?? null;
     const partNameParams = useLocation().state?.partNameParams;
-    const modelDescriptionParams = useLocation().state?.modelDescriptionParams;
-    const modelDescription = modelDescriptionParams || modelDescriptionStorage || "";
     const [partName, setPartName] = useState(partNameParams || partNameStorage || "");
     const memoryPartName = useMemo(() => partName, [partName]);
     const memorySetPartName = useMemo(() => setPartName, [setPartName]);
@@ -38,7 +35,6 @@ export const useCreateOperationVar = (columnFilters: MRT_ColumnFiltersState, pag
     return {
         partName: memoryPartName,
         setPartName: memorySetPartName,
-        modelDescription: modelDescription,
         paramRequest: paramsRequest,
         startFilter: memoStartFilter,
         endFilter: memoEndFilter,

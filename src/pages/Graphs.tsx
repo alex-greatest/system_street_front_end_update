@@ -9,7 +9,6 @@ import {GraphPdf} from "../component/result/graph/GraphTemplatePdf";
 import {OutputDetailOperation} from "../component/result/OutputDetailOperation";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import {ToastContainer} from "react-toastify";
-import dayjs from "dayjs";
 import {GraphEffortData} from "../component/result/graph/effort/GraphEffortData";
 import {GraphMomentData} from "../component/result/graph/moment/GraphMomentData";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -44,12 +43,12 @@ export const Graphs = observer(() => {
             (ulrToGraphEffort, urlToGraphMoment, urlToTableMoment) =>
                 <GraphPdf
                     idHtmlGraphEffort={ulrToGraphEffort}
-                    idHtmlTableMoment={urlToGraphMoment}
-                    idHtmlGraphMoment={urlToTableMoment}
+                    idHtmlTableMoment={urlToTableMoment}
+                    idHtmlGraphMoment={urlToGraphMoment}
                     date={date}
                     modeDescription={modelDescription}
                     partName={partName} />,
-            `${partName}-${dayjs(date).format('YYYY_MM_DD_HH:mm:ss').toString()}.pdf`,
+            `${partName}-${date}.pdf`,
             idGraphEffort,
             idGraphMoment,
             idTableMoment);

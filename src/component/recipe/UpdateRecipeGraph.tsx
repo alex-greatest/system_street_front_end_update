@@ -25,8 +25,6 @@ export const UpdateRecipeGraph = (
     const recipeGraph = {...props.row?.original ?? {id: -1, value: 0, user: {id: -1, name: ""}}};
     const {referenceId, nameGraph, keyQuery} = props;
 
-    console.log(props.row);
-
     const {control,
         handleSubmit,
         formState: {errors}} = useForm<RecipeGraph>({

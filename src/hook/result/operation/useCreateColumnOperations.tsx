@@ -33,7 +33,7 @@ export const useCreateColumnOperations = (statusOperationsListName: string[]|und
             {
                 accessorKey: 'user.name',
                 header: 'Оператор',
-                enableColumnFilter: true
+                enableColumnFilter: false
             },
         ],
         [dataForStatusMemo, endTime, setEndTime, setStartTime, startTime],

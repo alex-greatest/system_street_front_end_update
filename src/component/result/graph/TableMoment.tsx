@@ -34,9 +34,9 @@ export const TableMoment = observer(
                         </TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell align="center">Максимальная помощь</TableCell>
-                        <TableCell align="center">Номинальная помощь</TableCell>
-                        <TableCell align="center">Минимальная помощь</TableCell>
+                        <TableCell align="center">Максимум</TableCell>
+                        <TableCell align="center">Номинал</TableCell>
+                        <TableCell align="center">Минимум</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

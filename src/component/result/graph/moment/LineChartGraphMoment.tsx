@@ -48,7 +48,7 @@ export const LineChartGraphMoment = observer((props:
 
     return (
         <Box sx={{width: '100%', display: 'flex', gap: '2em', padding: "0 1em"}}>
-            <ResponsiveContainer key={"responsiveContainerGraphMoment"} id={idGraphMoment} width={"50%"} height={700}>
+            <ResponsiveContainer key={"responsiveContainerGraphMoment"} id={idGraphMoment} width={"50%"} height={900}>
                 <LineChart
                     key={"lineChartGraphMoment"}
                     width={500}
@@ -101,7 +101,7 @@ export const LineChartGraphMoment = observer((props:
                         activeDot={{ r: 8 }}
                         dot={true}
                         strokeDasharray={"3, 3"}
-                        name="Минимальная помощь" />
+                        name="Минимум" />
                     <Line
                         data={data?.graphResultMomentTemplate?.rightMaxAssistance}
                         onAnimationEnd={() => {setIsLoadThirdLine(true)}}
@@ -109,7 +109,7 @@ export const LineChartGraphMoment = observer((props:
                         stroke="#8b00ff"
                         activeDot={{ r: 8 }}
                         strokeDasharray={"3, 3"}
-                        name="Максимальная помощь" />
+                        name="Максимум" />
                     <Line
                         data={data?.graphResultMomentTemplate?.leftMinAssistance}
                         onAnimationEnd={() => {setIsLoadFourthLine(true)}}
@@ -119,7 +119,7 @@ export const LineChartGraphMoment = observer((props:
                         activeDot={{ r: 8 }}
                         dot={true}
                         strokeDasharray={"3, 3"}
-                        name="Минимальная помощь" />
+                        name="Минимум" />
                     <Line
                         data={data?.graphResultMomentTemplate?.leftMaxAssistance}
                         onAnimationEnd={() => {setIsLoadFifthLine(true)}}
@@ -129,7 +129,7 @@ export const LineChartGraphMoment = observer((props:
                         legendType={'none'}
                         activeDot={{ r: 8 }}
                         strokeDasharray={"3, 3"}
-                        name="Максимальная помощь" />
+                        name="Максимум" />
                     <ReferenceLine
                         x={0}
                         stroke="gray"
@@ -149,9 +149,9 @@ export const LineChartGraphMoment = observer((props:
                                 strokeWidth={1.5}
                                 strokeOpacity={1}
                             >
-                                {/*<Label style={{fontSize: '20px',}} angle={-90} dx={-20} position="right" >
+                                <Label style={{fontSize: '20px',}} angle={-90} dx={-20} position="right" >
                                     {`Момент: ${bar.moment}`}
-                                </Label> */}
+                                </Label>
                             </ReferenceLine>
                     ))}
                 </LineChart>

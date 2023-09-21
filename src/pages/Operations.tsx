@@ -176,7 +176,7 @@ export const Operations = observer((props: {mainProps: ITemplateDataGrid}) => {
                             </Button>}
                     </Box>
                 )}
-                rowCount={totalElements ?? 1}
+                rowCount={totalElements && partName ? totalElements : 1}
                 state={{
                     columnFilters,
                     isLoading,

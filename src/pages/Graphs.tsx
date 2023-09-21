@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSearchParams} from "react-router-dom";
 import {StoreService} from "../service/StoreService";
 import {Box, Fab, Stack, Typography} from "@mui/material";
@@ -19,7 +19,8 @@ const helpDownloadFile = new HelpDownloadFile();
 export const Graphs = observer(() => {
     const [searchParams,] = useSearchParams();
     const operationId = searchParams.get("operationId") ?? -1;
-    const partName = StoreService.getData(`/graph_effort/${operationId}`)?.partName ?? "";
+    const tempPart = StoreService.getData(`/graph_effort/${operationId}`)?.partName ?? "";
+    const [partName, setPartName] = useState(tempPart);
     const date = StoreService.getData(`/graph_effort/${operationId}`)?.date ?? new Date();
     const modelDescription = StoreService.getData(`/graph_effort/${operationId}`)?.modelDescription ?? "";
     const idGraphEffort = "graphEffortLineChart";
@@ -28,7 +29,8 @@ export const Graphs = observer(() => {
 
     useEffect(() => {
         const partNameFromLocalStorage = StoreService.getDataLocal(`/graph_effort/${operationId}`)?.partName ?? "" as string;
-        if (partNameFromLocalStorage && partNameFromLocalStorage.length > 0) {
+        if (partNameFromLocalStorage) {
+            setPartName(partNameFromLocalStorage);
             StoreService.addData(`/graph_effort/${operationId}`, {
                 partName: partNameFromLocalStorage,
                 date: StoreService.getDataLocal(`/graph_effort/${operationId}`)?.date ?? new Date(),
@@ -36,7 +38,9 @@ export const Graphs = observer(() => {
             });
             StoreService.removeDataLocal(`/graph_effort/${operationId}`);
         }
-    }, [operationId]);
+    }, [operationId, partName]);
+
+    console.log("Graphs: " + operationId);
 
     const generatePdf = async () => {
         await helpDownloadFile.downloadPdf(

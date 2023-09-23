@@ -20,6 +20,7 @@ export const useCreateColumnTags = (typesOpc: string[]|undefined,
                 header: 'Тип',
                 Filter: ({column}) => (
                     <TemplateSelectorFilter
+                        key={"typeColumnTags"}
                         column={column}
                         list={typesOpc}
                         isListReady={!!typesOpc} />
@@ -30,6 +31,7 @@ export const useCreateColumnTags = (typesOpc: string[]|undefined,
                 header: 'Единицы измерения',
                 Filter: ({column}) => (
                     <TemplateSelectorFilter
+                        key={"unitColumnTags"}
                         column={column}
                         list={units}
                         isListReady={!!units} />

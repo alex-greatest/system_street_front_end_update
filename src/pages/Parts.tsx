@@ -8,7 +8,6 @@ import {
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {MRT_Localization_RU} from "material-react-table/locales/ru";
 import {StoreService} from "../service/StoreService";
-import {ITemplateDataGrid} from "../type/template-data-grid/ITemplateDataGrid";
 import {DataTimeComponent} from "../component/result/DateTimeComponent";
 import {useCreateColumnPart} from "../hook/result/part/useCreateColumnPart";
 import {useGetParts} from "../utils/api/part";
@@ -22,14 +21,14 @@ import {HelpDownloadFileCsv} from "../service/file/HelpDownloadFileCsv";
 import Button from "@mui/material/Button";
 import {observer} from "mobx-react-lite";
 import {ToastContainer} from "react-toastify";
-
+import {useTemplateDataGrid} from "../hook/useTemplateDataGrid";
 
 const helpDownloadFileCsv = new HelpDownloadFileCsv();
 
-export const Parts = observer((props: {mainProps: ITemplateDataGrid}) => {
+const Parts = observer(() => {
     const {columnFilters, setColumnFilters, sorting,
         setSorting, pagination, setPagination}
-        = props.mainProps;
+        = useTemplateDataGrid("/parts");
     const {
         startTime,
         endTime,
@@ -57,11 +56,9 @@ export const Parts = observer((props: {mainProps: ITemplateDataGrid}) => {
                 columnFilters,
                 sorting,
                 pagination,
-                startTime,
-                endTime
             });
         }
-    }, [columnFilters, endTime, modelDescriptionList, pagination, sorting, startTime, statusOperationsListName]);
+    }, [columnFilters, modelDescriptionList, pagination, sorting, statusOperationsListName]);
 
     const onSubmitDownloadCsvOperation = async (partId: number) => {
         await helpDownloadFileCsv.DownloadFileCsv(partId,
@@ -148,7 +145,7 @@ export const Parts = observer((props: {mainProps: ITemplateDataGrid}) => {
                                 key={`ResultOperationsExportCsv${row.original.id}`}
                                 color="secondary"
                                 onClick={() => {
-                                    onSubmitDownloadCsvOperation(row?.original?.id ?? 0).then(r => {})
+                                    onSubmitDownloadCsvOperation(row?.original?.id ?? 0).then(_ => {})
                                 }}>
                                 <FileDownloadIcon />
                             </IconButton>
@@ -167,3 +164,5 @@ export const Parts = observer((props: {mainProps: ITemplateDataGrid}) => {
         </>
     );
 });
+
+export default Parts;

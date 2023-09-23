@@ -4,7 +4,7 @@ export class GetPageName {
     public static getPageName(location: Location): string {
         switch (location.pathname) {
             case "/":
-                return "Релувые механизмы";
+                return "Рулевые механизмы";
             case "/users":
                 return "Управление пользователями"
             case "/plc":

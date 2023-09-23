@@ -16,7 +16,7 @@ import {ScrollTop} from "../component/main/ScrollToTop";
 
 const helpDownloadFile = new HelpDownloadFile();
 
-export const Graphs = observer(() => {
+const Graphs = observer(() => {
     const [searchParams,] = useSearchParams();
     const operationId = searchParams.get("operationId") ?? -1;
     const tempPart = StoreService.getData(`/graph_effort/${operationId}`)?.partName ?? "";
@@ -97,3 +97,5 @@ export const Graphs = observer(() => {
         </>
     );
 });
+
+export default Graphs;

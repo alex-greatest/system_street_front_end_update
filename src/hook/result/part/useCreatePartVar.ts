@@ -1,5 +1,4 @@
 import  {useMemo, useState} from "react";
-import {StoreService} from "../../../service/StoreService";
 import {MRT_ColumnFiltersState, MRT_PaginationState} from "material-react-table";
 import {DataGridPartService} from "../../../service/datagrid/DataGridPartService";
 import {PartHook} from "../../../type/template-data-grid/hook/PartHook";
@@ -9,11 +8,8 @@ const partService = new DataGridPartService();
 
 export const useCreatePartVar = (columnFilters: MRT_ColumnFiltersState, pagination: MRT_PaginationState):
     PartHook => {
-    const storageOperation = StoreService.getData("/parts");
-    const startTimeStorage = storageOperation?.startTime;
-    const endTimeStorage = storageOperation?.endTime
-    const [startTime, setStartTime] = useState(startTimeStorage ?? dayjs().startOf('day'));
-    const [endTime, setEndTime] = useState(endTimeStorage ??  dayjs().endOf('day'));
+    const [startTime, setStartTime] = useState(dayjs().startOf('day'));
+    const [endTime, setEndTime] = useState(dayjs().endOf('day'));
     const memorySetStartTime = useMemo(() => setStartTime, [setStartTime]);
     const memoryStartTime = useMemo(() => startTime, [startTime]);
     const memorySetEndTime = useMemo(() => setEndTime, [setEndTime]);

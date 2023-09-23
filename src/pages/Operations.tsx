@@ -9,7 +9,6 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import {MRT_Localization_RU} from "material-react-table/locales/ru";
 import {StoreService} from "../service/StoreService";
 import {useGetOperations} from "../utils/api/operation";
-import {ITemplateDataGrid} from "../type/template-data-grid/ITemplateDataGrid";
 import {InputPartName} from "../component/result/InputPartName";
 import {useCreateOperationVar} from "../hook/result/operation/useCreateOperationVar";
 import {useCreateSelectStatusList} from "../hook/result/useCreateSelectStatusList";
@@ -23,13 +22,14 @@ import {observer} from "mobx-react-lite";
 import {Operation} from "../type/result/operation/Operation";
 import {ToastContainer} from "react-toastify";
 import {useReferenceByPartName} from "../utils/api/reference";
+import {useTemplateDataGrid} from "../hook/useTemplateDataGrid";
 
 const helpDownloadFileCsv = new HelpDownloadFileCsv();
 
-export const Operations = observer((props: {mainProps: ITemplateDataGrid}) => {
+const Operations = observer(() => {
     const {columnFilters, setColumnFilters, sorting,
         setSorting, pagination, setPagination}
-        = props.mainProps;
+        = useTemplateDataGrid("/operations");
     const operationDefault: Operation = useMemo(() => ({
         id: -1,
         status: { id: -1, statusName: "" },
@@ -196,3 +196,5 @@ export const Operations = observer((props: {mainProps: ITemplateDataGrid}) => {
         </Box>
     );
 });
+
+export default Operations;

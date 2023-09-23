@@ -7,7 +7,7 @@ import {NotificationDisplayService} from "../service/NotificationDisplayService"
 import {Id, ToastContainer} from "react-toastify";
 import {observer} from "mobx-react-lite";
 
-export const PLC = observer(() => {
+const PLC = observer(() => {
     const toastLoadingAddress: Id = 'toastLoadingAddress';
     const toastUpdateAddress: Id = 'toastUpdateAddress';
     const [isDisabledButton, setIsDisabledButton] = React.useState(false);
@@ -51,9 +51,9 @@ export const PLC = observer(() => {
 
     return (
         <>
+            <ToastContainer />
             {isLoading && NotificationDisplayService.showLoading(toastLoadingAddress)}
             {(isSuccess || isError) && NotificationDisplayService.hideLoading(toastLoadingAddress)}
-            <ToastContainer />
             <Box sx={{display: 'flex', justifyContent: 'center'}}>
                 <Paper elevation={6} sx= {{ minHeight: 330, width: 350, mt: '10em' }}>
                     <Box sx={{p: "30px 50px"}}>
@@ -116,3 +116,5 @@ export const PLC = observer(() => {
         </>
     );
 });
+
+export default PLC;

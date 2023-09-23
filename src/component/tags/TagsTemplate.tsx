@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {MaterialReactTable} from 'material-react-table';
+import React, {useMemo, useState} from 'react';
+import {MaterialReactTable, MRT_Row} from 'material-react-table';
 import {Box, IconButton, Tooltip} from '@mui/material';
 import {
     Delete,
@@ -18,33 +18,34 @@ import Button from "@mui/material/Button";
 import {TagsHook} from "../../type/template-data-grid/hook/TagsHook";
 import {observer} from "mobx-react-lite";
 import {DeleteDialog} from "../main/DeleteDialog";
+import {useDeleteRecipe, useGetTags} from "../../utils/api/tags";
+import {ReferenceTags} from "../../type/tag/ReferenceTags";
 
 const helper = new DataGridRecipeService();
-
 export const TagsTemplate = observer((props: {mainProps: TagsHook}) => {
     const {data: user} = useGetProfile();
     const units = useCreateSelectUnits();
     const typesOpc = useCreateSelectTypeOpc();
+    const [selectedReferenceRow, setSelectedReferenceRow] = useState<MRT_Row<ReferenceTags>>()
     const [deleteTags, setDeleteTags] = useState(false);
     const {
         updateRecipe,
         setUpdateRecipes,
         addRecipe,
         setAddRecipe,
-        selectedReferenceRow,
-        setSelectedReferenceRow,
-        selectReferences,
-        setSelectReferences,
-        mutationDeleteTags,
         useCreateColumTags,
         pathPage,
         keyQuery,
-        data,
-        isRecipe,
+        isRecipe} = props.mainProps;
+    const [selectReferences, setSelectReferences] =
+        useState({id: -1, modelDescription: ""});
+    const memoSelectReferences = useMemo(() => selectReferences, [selectReferences]);
+    const memoSetSelectReferences = useMemo(() => setSelectReferences, [setSelectReferences]);
+
+    const { data,
+        isError,
         isLoading,
-        isErrorGetList,
-        isFetching,
-        refetch} = props.mainProps;
+        refetch } = useGetTags(selectReferences.id, pathPage, keyQuery);
 
     const isHideAction = (pathTag: string) => {
         return pathTag !== "\"DB_Parameter\".\"Weg\".\"Discret\"" &&
@@ -52,13 +53,24 @@ export const TagsTemplate = observer((props: {mainProps: TagsHook}) => {
             pathTag !== "\"DB_Measure\".\"Kraft\".\"CCW_AVG\"";
     }
 
+    const mutationDelete = useDeleteRecipe({referenceId: selectReferences.id},
+        keyQuery,
+        pathPage,
+        (oldData, id) => {
+            oldData = oldData?.filter((item) => item.id !== id) ?? null;
+            return oldData;
+        });
+
     const onDelete = (idTag: number) => {
-        mutationDeleteTags.mutate(idTag);
+        mutationDelete.mutate(idTag);
     }
 
     return (
         <>
-            <SelectorReference selectReference={selectReferences} setSelectReferences={setSelectReferences} />
+            <SelectorReference
+                selectReference={memoSelectReferences}
+                pathPage={pathPage}
+                setSelectReferences={memoSetSelectReferences} />
             <MaterialReactTable
                 columns={useCreateColumTags(typesOpc, units)}
                 data={data && selectReferences?.id !== -1 ? data : []}
@@ -71,7 +83,7 @@ export const TagsTemplate = observer((props: {mainProps: TagsHook}) => {
                 enableEditing={user?.role?.roleName === 'admin' ?? false}
                 localization={MRT_Localization_RU}
                 muiToolbarAlertBannerProps={
-                    isErrorGetList
+                    isError
                         ? {
                             color: 'error',
                             children: 'Ошибка зарузки данных',
@@ -118,9 +130,8 @@ export const TagsTemplate = observer((props: {mainProps: TagsHook}) => {
                 )}
                 rowCount={data?.length}
                 state={{
-                    isLoading,
-                    showAlertBanner: isErrorGetList,
-                    showProgressBars: isFetching
+                    showAlertBanner: isError,
+                    isLoading: isLoading
                 }}
             />
             {updateRecipe && <UpdateRecipe

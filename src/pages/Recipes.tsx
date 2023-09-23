@@ -7,7 +7,8 @@ import React from "react";
 
 const keyQuery = "recipeDataGrid";
 
-export const Recipes = observer(() => {
+const Recipes = observer(() => {
+
     return (
         <>
             <ToastContainer />
@@ -21,3 +22,6 @@ export const Recipes = observer(() => {
         </>
     );
 });
+
+
+export default Recipes;

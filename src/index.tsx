@@ -19,6 +19,8 @@ import dayjs from "dayjs";
 import {ComponentPreviews, useInitial} from "./dev";
 import {globalConfig, pathToProperties} from "./utils/config"
 import {App} from "./App";
+import {ErrorBoundary} from "./component/main/ErrorBoundary";
+import 'react-toastify/dist/ReactToastify.css';
 
 dayjs.extend(localeData);
 dayjs.extend(localizedFormat);
@@ -44,9 +46,11 @@ const app: ReactElement =
                     <CssBaseline/>
                     <DevSupport ComponentPreviews={ComponentPreviews} useInitialHook={useInitial}>
                         <RootStoreProvider>
-                            <ObservedAxios>
-                                <App />
-                            </ObservedAxios>
+                            <ErrorBoundary>
+                                <ObservedAxios>
+                                        <App />
+                                </ObservedAxios>
+                            </ErrorBoundary>
                         </RootStoreProvider>
                     </DevSupport>
                     <ReactQueryDevtools initialIsOpen={false} />

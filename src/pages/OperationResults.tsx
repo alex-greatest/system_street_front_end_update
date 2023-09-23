@@ -12,7 +12,7 @@ import {OutputDetailOperation} from "../component/result/OutputDetailOperation";
 import {ScrollTop} from "../component/main/ScrollToTop";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-export const OperationsResults = observer(() => {
+const OperationsResults = observer(() => {
     const [searchParams,] = useSearchParams();
     const operationId = searchParams.get("operationId") ?? -1;
     const partName = StoreService.getData(`/operation_results/${operationId}`)?.partName ?? "";
@@ -79,3 +79,5 @@ export const OperationsResults = observer(() => {
         </>
     );
 })
+
+export default OperationsResults;

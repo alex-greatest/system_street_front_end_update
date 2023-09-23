@@ -17,7 +17,7 @@ export const useCreateColumnPart = (
         () => [
             {
                 accessorKey: 'partName',
-                header: 'Код детали',
+                header: 'Код механнизма',
                 enableColumnFilter: false
             },
             {

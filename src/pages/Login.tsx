@@ -17,7 +17,7 @@ import {observer} from "mobx-react-lite";
 import {ToastContainer} from "react-toastify";
 import {useStore} from "../component/main/RootStoreProvided";
 
-export const Login = observer((): ReactElement|null => {
+const Login = observer((): ReactElement|null => {
     const queryClient= useQueryClient();
     const authStore = useStore().authStore;
     const navigate: NavigateFunction = useNavigate();
@@ -129,3 +129,5 @@ export const Login = observer((): ReactElement|null => {
         </>
     );
 })
+
+export default Login;

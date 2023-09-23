@@ -7,7 +7,7 @@ import React from "react";
 
 const keyQuery = "tagResultsSettingDataGrid";
 
-export const TagResults = observer(() => {
+const TagResults = observer(() => {
     return (
         <>
             <ToastContainer />
@@ -22,3 +22,5 @@ export const TagResults = observer(() => {
         </>
     );
 });
+
+export default TagResults;

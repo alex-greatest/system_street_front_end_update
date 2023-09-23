@@ -14,18 +14,17 @@ import {UpdateReferenceDialog} from "../component/reference/UpdateReferenceDialo
 import {NewReferenceDialog} from "../component/reference/NewReferenceDialog";
 import {MRT_Localization_RU} from "material-react-table/locales/ru";
 import {StoreService} from "../service/StoreService";
-import {ITemplateDataGrid} from "../type/template-data-grid/ITemplateDataGrid";
 import {useGetProfile} from "../utils/api/auth";
 import {observer} from "mobx-react-lite";
 import {ToastContainer} from "react-toastify";
 import {DeleteDialog} from "../component/main/DeleteDialog";
+import {useTemplateDataGrid} from "../hook/useTemplateDataGrid";
 
 const helperReference = new DataGridReferenceService();
-
-export const References = observer((props: {mainProps: ITemplateDataGrid}) => {
+const References = observer(() => {
     const {columnFilters, setColumnFilters, sorting,
         setSorting, pagination, setPagination}
-        = props.mainProps;
+        = useTemplateDataGrid("/reference");
     const {data: user} = useGetProfile();
     const modelDescription = columnFilters?.find(item => item.id === 'modelDescription');
     const [updateReference, setUpdateReference] = useState(false);
@@ -193,3 +192,5 @@ export const References = observer((props: {mainProps: ITemplateDataGrid}) => {
         </>
     );
 });
+
+export default References;

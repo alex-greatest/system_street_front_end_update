@@ -1,71 +1,61 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useListNameReferences} from "../../utils/api/reference";
 import {ReferenceForRecipe} from "../../type/reference/ReferenceForRecipe";
-import {Box, FormControl, InputLabel, MenuItem, Select, Typography} from "@mui/material";
-import Button from "@mui/material/Button";
+import {Box, FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import {StoreService} from "../../service/StoreService";
 
 type selectList = React.Dispatch<React.SetStateAction<ReferenceForRecipe>>;
 
 export const SelectorReference = (
     props: {
         setSelectReferences: selectList,
-        selectReference?: ReferenceForRecipe }) => {
-    const {
-        setSelectReferences,
-        selectReference
-    } = props;
-    const {data: listReferences, isSuccess, isRefetching} = useListNameReferences();
-    const [selectModelDescription, setSelectModelDescription] =
-        useState("");
+        selectReference?: ReferenceForRecipe,
+        pathPage: string}) => {
+    const {data: listReferences} = useListNameReferences();
+    const [selectModelDescription, setSelectModelDescription] = useState("");
+    const {setSelectReferences, pathPage} = props;
     const [firstRender, setFirstRender] = useState(false);
-    const defaultValueReference = useMemo(() => {
-        return {id: -1, modelDescription: ""}
+
+    useEffect(() => {
+        const selectReferenceStore = StoreService.getData(pathPage);
+        const reference: ReferenceForRecipe = selectReferenceStore?.selectReferences ?? {id: -1, modelDescription: ""};
+        setSelectReferences(reference);
+        setSelectModelDescription(reference.modelDescription);
+        setFirstRender(true);
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        if (isSuccess && !isRefetching && !firstRender) {
-            setFirstRender(true);
-            const foundModelDescription = listReferences?.find(temp => temp.id === selectReference?.id)?.modelDescription
-            setSelectModelDescription(foundModelDescription ?? "");
-            setSelectReferences(foundModelDescription ? {...selectReference ?? defaultValueReference} : defaultValueReference);
+        if(firstRender) {
+            const reference = listReferences?.find(reference =>
+                reference.modelDescription === selectModelDescription) ?? {id: -1, modelDescription: ""};
+            setSelectReferences(reference);
+            StoreService.addData(pathPage, {selectReferences: reference});
         }
-    }, [defaultValueReference, firstRender, isRefetching, isSuccess, listReferences, selectReference, selectReference?.id, setSelectReferences]);
-
-    const changeReference = () => {
-        setSelectReferences({
-            ...listReferences?.find(temp => temp.modelDescription === selectModelDescription)
-            ?? defaultValueReference
-        });
-    }
+        //eslint-disable-next-line
+    }, [listReferences, pathPage, selectModelDescription, setSelectReferences]);
 
     return (
         <Box sx={{width: '100%', display: 'flex'}}>
-            <Typography fontSize={"25px"} sx={{margin: '1em 0 1em 0'}}>
-                {selectReference?.id === -1 ? "Тип не выбран" : `Выбранный тип: ${selectReference?.modelDescription}`}
-            </Typography>
-            <Box sx={{display: 'flex', width: '30%', gap: '1em', margin: '1em 0 1em auto'}}>
+            <Box sx={{display: 'flex', width: '20%', gap: '1em', margin: '1em 0 1em auto'}}>
                 <FormControl fullWidth>
-                    <InputLabel id={`referenceListInputModelDescriptionId`}>Тип детали</InputLabel>
+                    <InputLabel key={`referenceListInputModelDescriptionKey`} id={`referenceListInputModelDescriptionId`}>Тип детали</InputLabel>
                     <Select
                         id={`referenceListModelDescriptionId`}
                         key={`referenceListModelDescriptionKey`}
                         value={(listReferences && listReferences?.length > 0 && selectModelDescription) || ""}
                         onChange={(e) => setSelectModelDescription(e.target.value)}
                         labelId={`referenceListLabelModelDescription`}
-                        defaultValue=""
-                        label="Тип детали">
-                        <MenuItem key={"referenceDefaultSelectValue"} value={""}> </MenuItem>
+                        label="Тип детали"
+                        defaultValue="">
                         {listReferences && listReferences?.length > 0 ?
                             listReferences.map(reference =>
                                 <MenuItem key={reference.modelDescription} value={reference.modelDescription}>
                                     {reference.modelDescription}
                                 </MenuItem>
-                            ) : null}
+                            ) : <MenuItem key={"referenceDefaultSelectValue"} value={""}> </MenuItem>}
                     </Select>
                 </FormControl>
-                <Button sx={{width: '40%'}} color="primary" onClick={() => changeReference()} variant="contained">
-                    Выбрать
-                </Button>
             </Box>
         </Box>
     );

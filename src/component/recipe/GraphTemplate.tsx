@@ -1,10 +1,9 @@
-import React, {useEffect, useMemo} from 'react';
-import {MaterialReactTable, type MRT_ColumnDef} from 'material-react-table';
+import React, {useMemo, useState} from 'react';
+import {MaterialReactTable, type MRT_ColumnDef, MRT_Row} from 'material-react-table';
 import {Box, IconButton, Tooltip} from '@mui/material';
 import {
     Edit as EditIcon
 } from '@mui/icons-material';
-import {RecipeGraphProps} from "../../type/recipe/RecipeGraphProps";
 import {DataGridRecipeGraphService} from "../../service/datagrid/DataGridReсipeGraphService";
 import {SelectorReference} from "../reference/SelectorReference";
 import {StoreService} from "../../service/StoreService";
@@ -18,12 +17,17 @@ import {observer} from "mobx-react-lite";
 
 const helper = new DataGridRecipeGraphService();
 
-export const GraphTemplate = observer((props: {selectorData: RecipeGraphProps, nameGraph: string, keyQuery: string}) => {
-    const {nameGraph, keyQuery} = props;
+export const GraphTemplate = observer((props: {
+    nameGraph: string,
+    keyQuery: string,
+    pathPage: string}) => {
+    const {nameGraph, keyQuery, pathPage} = props;
     const {data: user} = useGetProfile();
-    const {updateRecipeGraph, setUpdateRecipeGraph,
-        selectedReferenceRow, setSelectedReferenceRow,
-        selectReferences, setSelectReferences} = props.selectorData;
+    const selectReferenceStore = StoreService.getData(nameGraph);
+    const [updateRecipeGraph, setUpdateRecipeGraph] = useState(false);
+    const [selectedReferenceRow, setSelectedReferenceRow] = useState<MRT_Row<RecipeGraph>>();
+    const [selectReferences, setSelectReferences] =
+        useState(selectReferenceStore?.selectReferences ?? {id: -1, modelDescription: ""});
 
     const memoSelectReferences =
         useMemo(
@@ -34,12 +38,6 @@ export const GraphTemplate = observer((props: {selectorData: RecipeGraphProps, n
         useMemo(
             () => setSelectReferences,
             [setSelectReferences]);
-
-    useEffect(() => {
-        StoreService.addData(nameGraph, {
-            selectReferences: memoSelectReferences
-        });
-    }, [nameGraph, memoSelectReferences]);
 
     const { data,
         isError: isErrorGetList,
@@ -68,7 +66,8 @@ export const GraphTemplate = observer((props: {selectorData: RecipeGraphProps, n
     return (
         <>
             <SelectorReference selectReference={memoSelectReferences}
-                               setSelectReferences={memoSetSelectReferences} />
+                               setSelectReferences={memoSetSelectReferences}
+                               pathPage={pathPage}/>
             <MaterialReactTable
                 key={`recipeGraphMaterialTable${nameGraph}`}
                 columns={columns}

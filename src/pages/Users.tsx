@@ -19,20 +19,20 @@ import {NewAccountUserDialog} from "../component/user/NewAccountUserDialog";
 import {UpdatePassword} from "../component/user/UpdatePassword";
 import {MRT_Localization_RU} from "material-react-table/locales/ru";
 import {StoreService} from "../service/StoreService";
-import {ITemplateDataGrid} from "../type/template-data-grid/ITemplateDataGrid";
 import {useGetProfile} from "../utils/api/auth";
 import {observer} from "mobx-react-lite";
 import {ToastContainer} from "react-toastify";
 import {useCreateStatusColumn} from "../hook/result/useCreateStatusColumn";
 import {StyleColumnDefault} from "../component/template/column/StyleColumnDefault";
 import {DeleteDialog} from "../component/main/DeleteDialog";
+import {useTemplateDataGrid} from "../hook/useTemplateDataGrid";
 
 const helperUser = new DataGridUserService();
 
-export const Users = observer((props: {mainProps: ITemplateDataGrid}) => {
+const Users = observer(() => {
     const {columnFilters, setColumnFilters, sorting,
         setSorting, pagination, setPagination}
-        = props.mainProps;
+        = useTemplateDataGrid("/users");
     const {data: user} = useGetProfile();
     const {data: roles} = useGetRoles();
     const dataForStatus =
@@ -207,3 +207,5 @@ export const Users = observer((props: {mainProps: ITemplateDataGrid}) => {
         </>
     );
 });
+
+export default Users;
